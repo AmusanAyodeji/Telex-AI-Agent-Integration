@@ -108,6 +108,6 @@ class PostAgent:
             history=history
         )
 
-        logging.info(f"sending message: {messages}")
+        logging.info(f"sending message: {result}")
 
         return result
