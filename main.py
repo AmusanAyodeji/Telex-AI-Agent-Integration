@@ -10,31 +10,13 @@ from agents.post_agent import PostAgent
 
 load_dotenv()
 
-# Initialize post agent
-post_agent = None
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    """Lifespan context manager for startup and shutdown"""
-    global post_agent
-
-    # Startup: Initialize the post agent
-    post_agent = PostAgent(
-        api_key=os.getenv("OPENROUTER_API_KEY")
-    )
-    yield
-
-    # Shutdown: Cleanup
-    if post_agent:
-        await post_agent.cleanup()
-
-
 app = FastAPI(
     title="Linkedin Post Agent A2A",
     description="A linkedin post agent with A2A protocol support",
-    version="1.0.0",
-    lifespan=lifespan
+    version="1.0.0"
 )
+
+post_agent = PostAgent(api_key=os.getenv("OPENROUTER_API_KEY"))
 
 @app.post("/a2a/linkedin")
 async def a2a_endpoint(request: Request):
