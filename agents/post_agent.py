@@ -3,12 +3,21 @@ from uuid import uuid4
 from openai import OpenAI
 import os
 from dotenv import load_dotenv
-
-load_dotenv()
+import logging
 
 from models.a2a import (
     A2AMessage, TaskResult, TaskStatus, Artifact,
     MessagePart, MessageConfiguration
+)
+
+load_dotenv()
+
+logging.basicConfig(
+    level=logging.INFO,                     # Log level
+    format="%(asctime)s [%(levelname)s] %(message)s",  # Log format
+    handlers=[
+        logging.StreamHandler()             # Also show them in the console
+    ]
 )
 
 history: List[A2AMessage] = []
@@ -64,6 +73,8 @@ class PostAgent:
 
         global history
 
+        logging.info(f"Processing message: {messages}")
+
         context_id = context_id or str(uuid4())
         task_id = task_id or str(uuid4())
 
@@ -87,7 +98,7 @@ class PostAgent:
         # Build history
         history += messages + [response_message]
 
-        return TaskResult(
+        result = TaskResult(
             id=task_id,
             contextId=context_id,
             status=TaskStatus(
@@ -96,3 +107,7 @@ class PostAgent:
             ),
             history=history
         )
+
+        logging.info(f"sending message: {messages}")
+
+        return result
