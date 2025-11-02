@@ -18,7 +18,7 @@ app = FastAPI(
 
 post_agent = PostAgent(api_key=os.getenv("OPENROUTER_API_KEY"))
 
-@app.post("/a2a/linkedin")
+@app.get("/a2a/linkedin")
 async def a2a_endpoint(request: Request):
     """Main A2A endpoint for chess agent"""
     try:
@@ -92,5 +92,6 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.getenv("PORT", 5001))    
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    # port = int(os.getenv("PORT", 5001)) 
+    # , host="0.0.0.0", port=port   
+    uvicorn.run(app)
