@@ -11,8 +11,9 @@ from models.a2a import (
     MessagePart, MessageConfiguration
 )
 
-def generate_linkedin_post(API_KEY, brief: str) -> str:
+history: List[A2AMessage] = []
 
+def generate_linkedin_post(API_KEY, brief: str) -> str:
   client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
     api_key=API_KEY
@@ -51,6 +52,7 @@ class PostAgent:
     def __init__(self, api_key: str):
         self.api_key = api_key
 
+    
     async def process_messages(
         self,
         messages: List[A2AMessage],
@@ -58,6 +60,9 @@ class PostAgent:
         task_id: Optional[str] = None,
         config: Optional[MessageConfiguration] = None
     ) -> TaskResult:
+
+
+        global history
 
         context_id = context_id or str(uuid4())
         task_id = task_id or str(uuid4())
@@ -80,7 +85,7 @@ class PostAgent:
         )
 
         # Build history
-        history = messages + [response_message]
+        history += messages + [response_message]
 
         return TaskResult(
             id=task_id,
