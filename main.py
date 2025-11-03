@@ -20,7 +20,6 @@ post_agent = PostAgent(api_key=os.getenv("OPENROUTER_API_KEY"))
 
 @app.post("/a2a/linkedin")
 async def a2a_endpoint(request: Request):
-    """Main A2A endpoint for chess agent"""
     try:
         # Parse request body
         body = await request.json()

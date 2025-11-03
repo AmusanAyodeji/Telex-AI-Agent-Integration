@@ -95,6 +95,13 @@ class PostAgent:
             taskId=task_id
         )
 
+        artifacts = [
+            Artifact(
+                name="post",
+                parts=[MessagePart(kind="text", text=linkedin_post)]
+            )
+        ]
+        
         # Build history
         history += messages + [response_message]
 
@@ -105,6 +112,7 @@ class PostAgent:
                 state="completed",
                 message=response_message
             ),
+            artifacts=artifacts,
             history=history
         )
 
