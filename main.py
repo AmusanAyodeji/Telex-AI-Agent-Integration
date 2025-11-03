@@ -47,12 +47,7 @@ async def a2a_endpoint(request: Request):
         config = None
 
         if rpc_request.method == "message/send":
-            # Accept either a single message or an array (for compatibility)
-            if hasattr(rpc_request.params, "messages"):
-                messages = rpc_request.params.messages
-            else:
-                messages = [rpc_request.params.message]
-                
+            messages = [rpc_request.params.message]
             config = rpc_request.params.configuration
         elif rpc_request.method == "execute":
             messages = rpc_request.params.messages
