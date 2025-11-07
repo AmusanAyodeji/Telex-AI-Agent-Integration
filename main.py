@@ -49,10 +49,19 @@ async def a2a_endpoint(request: Request):
         if rpc_request.method == "message/send":
             messages = [rpc_request.params.message]
             config = rpc_request.params.configuration
+
         elif rpc_request.method == "execute":
-            messages = rpc_request.params.messages
-            context_id = rpc_request.params.contextId
-            task_id = rpc_request.params.taskId
+            if getattr(rpc_request.params, "messages", None):
+                messages = rpc_request.params.messages
+            elif getattr(rpc_request.params, "message", None):
+                messages = [rpc_request.params.message]
+            else:
+                raise ValueError("No message(s) found in request")
+
+            context_id = getattr(rpc_request.params, "contextId", None)
+            task_id = getattr(rpc_request.params, "taskId", None)
+            config = getattr(rpc_request.params, "configuration", None)
+
 
         # Process with post agent
         result = await post_agent.process_messages(

@@ -1,13 +1,13 @@
 # models/a2a.py
 from pydantic import BaseModel, Field
-from typing import Literal, Optional, List, Dict, Any
+from typing import Literal, Optional, List, Dict, Any, Union
 from datetime import datetime
 from uuid import uuid4
 
 class MessagePart(BaseModel):
-    kind: Literal["text", "data", "file"]
+    kind: str
     text: Optional[str] = None
-    data: Optional[Dict[str, Any]] = None
+    data: Optional[Union[dict, list]] = None
     file_url: Optional[str] = None
 
 class A2AMessage(BaseModel):
@@ -35,7 +35,9 @@ class MessageParams(BaseModel):
 class ExecuteParams(BaseModel):
     contextId: Optional[str] = None
     taskId: Optional[str] = None
-    messages: List[A2AMessage]
+    messages: Optional[List[A2AMessage]] = None
+    message: Optional[A2AMessage] = None
+    configuration: Optional[MessageConfiguration] = None
 
 class JSONRPCRequest(BaseModel):
     jsonrpc: Literal["2.0"]
